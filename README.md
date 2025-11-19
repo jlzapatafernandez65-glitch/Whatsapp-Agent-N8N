@@ -1,293 +1,339 @@
 
-# N8N WhatsApp Appointment Agent - Sistema de Gestión de Citas Inteligente
+# WhatsApp Appointment Agent
 
-Sistema avanzado de automatización de citas por WhatsApp con IA usando n8n, Evolution API y OpenAI. Gestiona conversaciones naturales con clientes, reserva y confirma citas automáticamente, mantiene contexto conversacional completo, valida disponibilidad en tiempo real, y envía recordatorios automáticos.
+Agente conversacional inteligente para WhatsApp que gestiona citas automáticamente usando n8n, Evolution API y OpenAI.
 
+## 📋 Descripción
 
-## 🚀 Características
+Sistema completo de automatización de WhatsApp que permite a los clientes reservar, consultar y gestionar citas mediante conversaciones naturales. El agente procesa mensajes de texto y audio, mantiene contexto conversacional, valida disponibilidad de horarios y registra automáticamente nuevos leads.
 
-- **Conversaciones naturales por WhatsApp** - Interacción fluida con clientes
-- **Reserva automática de citas** - Gestión inteligente de calendario
-- **Sistema de memoria contextual** - Redis para mantener historial
-- **Validación de disponibilidad** - Consulta horarios en tiempo real
-- **Recordatorios automáticos** - Notificaciones previas a la cita
-- **Gestión de cancelaciones** - Reprogramación automática
-- **Múltiples servicios** - Gestión de diferentes tipos de citas
-- **Base de conocimiento vectorial** - Respuestas contextuales con Qdrant
+## ✨ Características Principales
+
+- **Conversación Natural**: Interacción fluida usando GPT-4 para comprensión de intenciones
+- **Gestión Completa de Citas**: Reserva, consulta, modificación y cancelación de citas
+- **Memoria Contextual**: Mantiene el historial de conversación con Redis
+- **Búsqueda Semántica**: Utiliza Qdrant para respuestas basadas en conocimiento del negocio
+- **Procesamiento de Audio**: Transcripción automática de notas de voz con Whisper
+- **Validación de Horarios**: Respeta disponibilidad y horarios de negocio
+- **Sistema de Recordatorios**: Envío automático de confirmaciones y recordatorios
+- **Registro de Leads**: Captura y almacenamiento automático de datos de clientes
+
+## 🏗️ Arquitectura del Sistema
+
+```
+Cliente WhatsApp
+    ↓
+Evolution API (Gateway WhatsApp)
+    ↓
+Webhook n8n
+    ↓
+Cola de Mensajes (Redis)
+    ↓
+├── Recuperación de Contexto (Redis)
+├── Búsqueda en Base de Conocimiento (Qdrant)
+├── Procesamiento IA (OpenAI GPT-4)
+├── Transcripción de Audio (Whisper)
+└── Gestión de Citas
+    ↓
+Respuesta al Cliente
+```
 
 ## 🛠️ Stack Tecnológico
 
-- **n8n** - Plataforma de automatización
-- **Evolution API** - Gateway de WhatsApp
-- **OpenAI GPT-4** - Modelo de lenguaje conversacional
-- **Redis** - Sistema de caché y sesiones
-- **Qdrant** - Base de datos vectorial para contexto
-- **Docker** - Contenedorización
+- **n8n**: Orquestación de workflows
+- **Evolution API**: Integración con WhatsApp
+- **OpenAI GPT-4**: Procesamiento de lenguaje natural
+- **Redis**: Gestión de sesiones y colas
+- **Qdrant**: Base de datos vectorial para búsqueda semántica
+- **Docker**: Contenedorización de servicios
 
-## 📋 Requisitos
+## 📦 Requisitos Previos
 
-- Docker 20.10+
-- Docker Compose 2.0+
-- Node.js 18+
-- Cuenta OpenAI con API Key
-- Instancia Evolution API configurada
-- VPS con mínimo 4GB RAM
+- Docker y Docker Compose instalados
+- Node.js 18+ (para n8n)
+- Cuenta de OpenAI con créditos disponibles
+- Instancia de Evolution API configurada
+- n8n (self-hosted o cloud)
+- Mínimo 2GB RAM disponible
 
-## ⚡ Instalación Rápida
+## 🚀 Instalación
+
+### Paso 1: Clonar el repositorio
 
 ```bash
-# Clonar repositorio
 git clone https://github.com/jlzapatafernandez65-glitch/Whatsapp-Agent-N8N.git
 cd Whatsapp-Agent-N8N
+```
 
-# Configurar variables de entorno
+### Paso 2: Configurar variables de entorno
+
+```bash
 cp .env.example .env
-nano .env
-
-# Levantar servicios
-docker-compose up -d
-
-# Acceder a n8n
-# http://localhost:5678
 ```
 
-Ver [QUICKSTART.md](docs/QUICKSTART.md) para instrucciones detalladas.
-
-## 📁 Estructura del Proyecto
-
-```
-├── docs/
-│   ├── INSTALLATION.md        # Guía de instalación completa
-│   ├── CONFIGURATION.md       # Configuración detallada
-│   ├── TECHNICAL.md           # Documentación técnica
-│   └── TROUBLESHOOTING.md     # Solución de problemas
-├── workflows/
-│   ├── whatsapp-appointment-agent.json
-│   └── appointment-reminder.json
-├── scripts/
-│   └── setup-qdrant.sh
-├── screenshots/               # Capturas de ejemplo
-├── .env.example
-├── .gitignore
-└── LICENSE
-```
-
-## 🔧 Configuración
-
-### 1. Variables de Entorno
-
-Edita `.env` con tus credenciales:
+Edita el archivo `.env` con tus credenciales:
 
 ```env
 # Evolution API
-EVOLUTION_API_URL=https://your-evolution-api-domain.com
-EVOLUTION_API_KEY=your-api-key-here
-EVOLUTION_INSTANCE_NAME=your-instance-name
+EVOLUTION_API_URL=https://tu-dominio-evolution.com
+EVOLUTION_API_KEY=tu-api-key
+EVOLUTION_INSTANCE_NAME=nombre-instancia
 
-# n8n
-N8N_HOST=http://localhost:5678
-N8N_API_KEY=your-n8n-api-key
+# OpenAI
+OPENAI_API_KEY=sk-tu-api-key-openai
 
 # Redis
 REDIS_HOST=localhost
 REDIS_PORT=6379
-REDIS_PASSWORD=your-redis-password
+REDIS_PASSWORD=tu-password-seguro
 
-# OpenAI
-OPENAI_API_KEY=your-openai-api-key
-OPENAI_MODEL=gpt
+# Qdrant
+QDRANT_URL=http://localhost:6333
+QDRANT_API_KEY=tu-api-key-qdrant
 
-# Business
-BUSINESS_NAME=Your Business Name
+# Configuración de Negocio
+BUSINESS_NAME=Tu Negocio
 BUSINESS_TIMEZONE=Europe/Madrid
+BUSINESS_HOURS_START=09:00
+BUSINESS_HOURS_END=19:00
 ```
 
-### 2. Importar Workflow
+### Paso 3: Iniciar servicios con Docker
 
-1. Accede a n8n en `http://localhost:5678`
+```bash
+docker-compose up -d
+```
+
+### Paso 4: Importar workflow en n8n
+
+1. Accede a tu instancia de n8n: `http://localhost:5678`
 2. Ve a **Workflows** → **Import from File**
-3. Importa `workflows/whatsapp-appointment-agent.json`
-4. Configura las credenciales necesarias
+3. Selecciona el archivo `workflows/whatsapp-appointment-agent.json`
+4. Configura las credenciales necesarias:
+   - OpenAI API Key
+   - Evolution API credentials
+   - Redis connection
+   - Qdrant API Key
 5. Activa el workflow
 
-### 3. Configurar Credenciales
+### Paso 5: Configurar webhook en Evolution API
 
-- OpenAI API Key
-- Evolution API credentials
-- Redis connection
-- Qdrant API Key
-
-## 📚 Documentación
-
-- [Instalación Completa](docs/INSTALLATION.md)
-- [Configuración Avanzada](docs/CONFIGURATION.md)
-- [Documentación Técnica](docs/TECHNICAL.md)
-- [Troubleshooting](docs/TROUBLESHOOTING.md)
-- [Guía Rápida](docs/QUICKSTART.md)
-
-## 🎯 Casos de Uso
-
-- **Salones de belleza** - Reserva automática de cortes, tintes, manicura
-- **Clínicas médicas** - Gestión de consultas y seguimiento
-- **Consultoría** - Agendamiento de sesiones y reuniones
-- **Servicios profesionales** - Abogados, contadores, terapeutas
-- **Fitness & Wellness** - Clases personales, nutrición, yoga
-- **Talleres mecánicos** - Revisiones y reparaciones
-
-## 💬 Ejemplo de Conversación
+En tu instancia de Evolution API, configura el webhook apuntando a:
 
 ```
-Cliente: Hola, necesito una cita
-Bot: ¡Hola! Con gusto te ayudo a agendar tu cita. ¿Para qué servicio la necesitas?
+https://tu-dominio-n8n.com/webhook/whatsapp-agent
+```
 
-Cliente: Corte de cabello
-Bot: Perfecto. ¿Qué día prefieres? Tengo disponibilidad esta semana de martes a sábado.
+## 📁 Estructura del Proyecto
 
-Cliente: El viernes por la tarde
-Bot: El viernes tengo estos horarios disponibles:
-     • 15:00
-     • 16:30
-     • 18:00
+```
+Whatsapp-Agent-N8N/
+├── workflows/
+│   ├── whatsapp-appointment-agent.json    # Workflow principal
+│   └── appointment-reminder.json          # Recordatorios automáticos
+├── docs/
+│   ├── INSTALLATION.md                    # Guía de instalación detallada
+│   ├── CONFIGURATION.md                   # Configuración avanzada
+│   ├── TECHNICAL.md                       # Documentación técnica
+│   └── TROUBLESHOOTING.md                 # Solución de problemas
+├── scripts/
+│   ├── setup-qdrant.sh                    # Script de inicialización Qdrant
+│   └── test-webhook.sh                    # Prueba de webhook
+├── screenshots/                            # Capturas de ejemplo
+├── docker-compose.yml                      # Configuración Docker
+├── .env.example                            # Plantilla de variables
+├── .gitignore
+├── LICENSE
+└── README.md
+```
+
+## 💬 Ejemplo de Uso
+
+**Conversación típica de reserva de cita:**
+
+```
+Cliente: Hola, necesito una cita para corte de cabello
+
+Bot: ¡Hola! Claro, con gusto te ayudo. ¿Qué día prefieres para tu corte?
+
+Cliente: El viernes
+
+Bot: Perfecto. El viernes 22 de noviembre tengo estos horarios disponibles:
+     • 10:00 AM
+     • 15:30 PM
+     • 17:00 PM
      ¿Cuál te viene mejor?
 
-Cliente: 16:30 está bien
-Bot: ¡Excelente! Necesito confirmar tus datos:
+Cliente: 15:30 está bien
+
+Bot: Excelente. Necesito confirmar algunos datos:
      📅 Fecha: Viernes 22 de noviembre
-     ⏰ Hora: 16:30
+     ⏰ Hora: 15:30
      ✂️ Servicio: Corte de cabello
      ⏱️ Duración: 30 minutos
      
-     ¿Es correcto? (responde SÍ para confirmar)
+     Por favor confirma con tu nombre completo.
 
-Cliente: Sí
-Bot: ¡Perfecto! Tu cita ha sido confirmada ✅
+Cliente: Juan Pérez
+
+Bot: ¡Perfecto Juan! Tu cita ha sido confirmada ✅
      
      Te enviaré un recordatorio 24 horas antes.
-     Si necesitas cancelar o reprogramar, solo escríbeme.
+     Si necesitas cancelar o modificar, simplemente escríbeme.
      
      ¡Nos vemos el viernes!
 ```
 
-![Conversation Flow](screenshots/conversation-flow.png)
+## 🔧 Configuración Avanzada
 
+### Personalización del Comportamiento del Agente
 
-## 🔐 Seguridad
+El comportamiento del agente se puede personalizar editando el prompt en el nodo "AI Agent" del workflow:
 
-- Variables de entorno para credenciales sensibles
-- Autenticación API con tokens
-- Validación de webhooks con firmas
-- Rate limiting en Redis
-- Logs de auditoría completos
-- Encriptación de datos sensibles
+```javascript
+// Personaliza el tono y estilo
+BUSINESS_TONE: "profesional y amigable"
+BUSINESS_STYLE: "formal/informal/casual"
 
-## 🚦 Estado del Proyecto
+// Define servicios disponibles
+SERVICES: ["corte", "tinte", "peinado", "tratamiento"]
 
-- ✅ **Activo** - En desarrollo y mantenimiento constante
-- ✅ **Producción** - Probado en entornos reales
-- ✅ **Estable** - v1.0 completamente funcional
+// Configura duración de servicios
+SERVICE_DURATION: {
+  "corte": 30,
+  "tinte": 90,
+  "peinado": 45
+}
+```
 
-## 🗺️ Roadmap
+### Configuración de Horarios
 
-- [ ] Integración con Google Calendar
-- [ ] Soporte para múltiples agentes simultáneos
-- [ ] Dashboard de administración web
-- [ ] Análisis de sentimientos en conversaciones
-- [ ] Recordatorios personalizables por cliente
-- [ ] Sistema de pagos integrado (Stripe/PayPal)
-- [ ] Reportes y analytics avanzados
-- [ ] Multi-idioma (inglés, francés, portugués)
-- [ ] Integración con CRMs populares (HubSpot, Salesforce)
+Edita los horarios de disponibilidad en el archivo `.env`:
 
-## 📊 Métricas de Rendimiento
+```env
+# Horarios por día de la semana
+MONDAY_START=09:00
+MONDAY_END=19:00
+TUESDAY_START=09:00
+TUESDAY_END=19:00
+# ... resto de días
 
-- **Tiempo de respuesta**: < 2 segundos
-- **Disponibilidad**: 99.9% uptime
-- **Precisión de reservas**: 98%
-- **Satisfacción del cliente**: 4.8/5
+# Días cerrados
+CLOSED_DAYS=["domingo"]
+```
 
-## 🛠️ Troubleshooting
+## 🐛 Troubleshooting
+
+### El bot no responde
+
+**Verificar:**
+1. Evolution API está conectada: `curl http://evolution-api/status`
+2. n8n está ejecutándose: `docker ps | grep n8n`
+3. Webhook está configurado correctamente en Evolution API
+4. El workflow está activado en n8n
+
+**Logs:**
+```bash
+docker-compose logs -f n8n
+docker-compose logs -f redis
+```
 
 ### Error de conexión con Redis
 
 ```bash
+# Reiniciar servicio Redis
 docker-compose restart redis
+
+# Verificar logs
 docker-compose logs redis
 ```
 
+### Respuestas lentas o timeout
+
+**Optimizaciones:**
+- Aumentar `max_tokens` en OpenAI (evitar respuestas cortadas)
+- Configurar timeout más alto en webhook (60s recomendado)
+- Revisar uso de memoria de Redis
+- Optimizar tamaño de colección en Qdrant
+
 ### Webhook no recibe mensajes
 
-Verifica:
-1. Evolution API está activo y conectado
-2. Webhook URL es correcta y accesible públicamente
-3. n8n está ejecutándose correctamente
-4. El workflow está activado
+**Verificar:**
+1. URL del webhook es accesible públicamente
+2. Certificado SSL válido (si usas HTTPS)
+3. Firewall no bloquea puerto del webhook
+4. Evolution API tiene el webhook correctamente configurado
 
-### Respuestas lentas
+## 📊 Casos de Uso
 
-- Revisa el uso de memoria de Redis
-- Optimiza consultas a Qdrant
-- Considera aumentar recursos del servidor
-- Revisa logs de OpenAI para rate limiting
+- **Salones de Belleza**: Reserva de cortes, tintes, manicura, peinados
+- **Clínicas y Consultorios**: Gestión de citas médicas y seguimiento
+- **Consultoría**: Agendamiento de sesiones y reuniones
+- **Servicios Profesionales**: Abogados, contadores, terapeutas
+- **Fitness & Wellness**: Clases personales, nutrición, yoga, masajes
+- **Talleres Mecánicos**: Revisiones, reparaciones, mantenimiento
+- **Centros Educativos**: Tutorías, asesorías, clases particulares
 
-Ver más en [TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md)
+## 🔒 Seguridad
+
+- Todas las credenciales se almacenan en variables de entorno
+- Comunicación HTTPS con Evolution API
+- Tokens de autenticación para webhooks de n8n
+- Validación de mensajes entrantes
+- Rate limiting implementado en Redis
+- Logs de seguridad activados
+
+## 📈 Roadmap
+
+- [ ] Integración con Google Calendar
+- [ ] Soporte para pagos integrados (Stripe/PayPal)
+- [ ] Dashboard web de administración
+- [ ] Análisis de sentimientos en conversaciones
+- [ ] Soporte para múltiples agentes simultáneos
+- [ ] Recordatorios automáticos personalizables
+- [ ] Exportación de reportes de citas
+- [ ] API REST para integración externa
+
+## 🤝 Contribuir
+
+Las contribuciones son bienvenidas. Para contribuir:
+
+1. Fork el proyecto
+2. Crea una rama para tu feature: `git checkout -b feature/NuevaFuncionalidad`
+3. Commit tus cambios: `git commit -m 'Añade nueva funcionalidad'`
+4. Push a la rama: `git push origin feature/NuevaFuncionalidad`
+5. Abre un Pull Request
 
 ## 📝 Licencia
 
-MIT License - ver [LICENSE](LICENSE)
+Este proyecto está bajo la Licencia MIT. Ver el archivo [LICENSE](LICENSE) para más detalles.
 
-```
-MIT License
-
-Copyright (c) 2025 José Luis Zapata
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction...
-```
-
-## 👤 Autor
+## 👨‍💻 Autor
 
 **José Luis Zapata**
-- 📍 Localización: Dos Hermanas, Sevilla, España  
-- 💼 Especialidad: AI Automation Specialist
-- 🌐 Website: [joseluiszapataia.com](https://joseluiszapataia.com)
-- 💼 LinkedIn: [José Luis Zapata](https://www.linkedin.com/in/jose-luis-zapata)
-- 🐙 GitHub: [@jlzapatafernandez65-glitch](https://github.com/jlzapatafernandez65-glitch)
-- 📧 Email: contacto@joseluiszapataia.com
+- 📍 Dos Hermanas, Sevilla, España
+- 💼 AI Automation Specialist
+- 🏢 José Luis Zapata IA - Consultancy
+- 🔗 GitHub: [@jlzapatafernandez65-glitch](https://github.com/jlzapatafernandez65-glitch)
 
-## 🤝 Contribuciones
+## 🙏 Agradecimientos
 
-¡Las contribuciones son bienvenidas! Por favor:
-
-1. Fork el proyecto
-2. Crea tu rama de feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
-
-### Guías de Contribución
-
-- Lee el [CONTRIBUTING.md](CONTRIBUTING.md)
-- Sigue el estilo de código del proyecto
-- Añade tests para nuevas funcionalidades
-- Actualiza la documentación cuando sea necesario
-
+- [n8n.io](https://n8n.io) - Plataforma de automatización de workflows
+- [Evolution API](https://evolution-api.com) - Gateway de WhatsApp
+- [OpenAI](https://openai.com) - Modelos de IA (GPT-4, Whisper)
+- [Qdrant](https://qdrant.tech) - Base de datos vectorial
+- [Redis](https://redis.io) - Sistema de caché y colas
 
 ## 📞 Soporte
 
-¿Tienes preguntas o necesitas ayuda?
+¿Necesitas ayuda o tienes preguntas?
 
-- 📖 Consulta la [documentación](docs/)
-- 📧 Contacto directo: info@joseluiszapataia.com
-
-## 🌟 Proyectos Relacionados
-
-- [N8N Email Agent](https://github.com/jlzapatafernandez65-glitch/n8n-email-agent-AGENTES-CONVERSACIONALES-) - Agente de correo electrónico
+- 📧 Abre un [Issue](https://github.com/jlzapatafernandez65-glitch/Whatsapp-Agent-N8N/issues)
+- 📚 Consulta la [documentación completa](./docs/)
+- 💬 Contacta directamente para implementaciones personalizadas
 
 ---
 
-⭐ **Si este proyecto te resulta útil, considera darle una estrella en GitHub** ⭐
+⭐ **Si este proyecto te resulta útil, dale una estrella en GitHub** ⭐
 
-![GitHub stars](https://img.shields.io/github/stars/jlzapatafernandez65-glitch/Whatsapp-Agent-N8N?style=social)
-![GitHub forks](https://img.shields.io/github/forks/jlzapatafernandez65-glitch/Whatsapp-Agent-N8N?style=social)
-![GitHub watchers](https://img.shields.io/github/watchers/jlzapatafernandez65-glitch/Whatsapp-Agent-N8N?style=social)
+**Desarrollado con ❤️ en Sevilla, España**
