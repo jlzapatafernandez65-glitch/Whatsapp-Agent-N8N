@@ -1,5 +1,5 @@
 
-# WhatsApp Appointment Agent
+# WhatsApp Agent N8N
 
 Agente conversacional inteligente para WhatsApp que gestiona citas automáticamente usando n8n, Evolution API y OpenAI.
 
