@@ -96,7 +96,7 @@ REDIS_PASSWORD=your-redis-password
 
 # OpenAI
 OPENAI_API_KEY=your-openai-api-key
-OPENAI_MODEL=gpt-4-turbo-preview
+OPENAI_MODEL=gpt
 
 # Business
 BUSINESS_NAME=Your Business Name
@@ -171,16 +171,6 @@ Bot: ¡Perfecto! Tu cita ha sido confirmada ✅
 
 ![Conversation Flow](screenshots/conversation-flow.png)
 
-## 📸 Screenshots
-
-### Panel de Control n8n
-![n8n Dashboard](screenshots/n8n-dashboard.png)
-
-### Workflow Completo
-![Workflow Overview](screenshots/workflow-overview.png)
-
-### Conversación Real
-![Real Conversation](screenshots/real-conversation.png)
 
 ## 🔐 Seguridad
 
@@ -283,28 +273,17 @@ in the Software without restriction...
 - Añade tests para nuevas funcionalidades
 - Actualiza la documentación cuando sea necesario
 
-## 🙏 Agradecimientos
-
-- [n8n.io](https://n8n.io) - Plataforma de automatización workflow
-- [Evolution API](https://evolution-api.com) - Gateway de WhatsApp
-- [OpenAI](https://openai.com) - Modelos GPT-4
-- [Qdrant](https://qdrant.tech) - Base de datos vectorial
-- [Redis](https://redis.io) - Sistema de caché
 
 ## 📞 Soporte
 
 ¿Tienes preguntas o necesitas ayuda?
 
 - 📖 Consulta la [documentación](docs/)
-- 🐛 Abre un [Issue](https://github.com/jlzapatafernandez65-glitch/Whatsapp-Agent-N8N/issues)
-- 💬 Únete a las [Discussions](https://github.com/jlzapatafernandez65-glitch/Whatsapp-Agent-N8N/discussions)
 - 📧 Contacto directo: info@joseluiszapataia.com
 
 ## 🌟 Proyectos Relacionados
 
 - [N8N Email Agent](https://github.com/jlzapatafernandez65-glitch/n8n-email-agent-AGENTES-CONVERSACIONALES-) - Agente de correo electrónico
-- [Evolution API Setup](https://github.com/jlzapatafernandez65-glitch/evolution-api-setup) - Instalación de Evolution API
-- [N8N Templates](https://github.com/jlzapatafernandez65-glitch/n8n-templates) - Colección de workflows
 
 ---
 
