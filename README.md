@@ -1,5 +1,5 @@
 
-# WhatsApp Agent N8N
+# WhatsApp Agent N8N - Sistema de Automatización Inteligente
 
 Agente conversacional inteligente para WhatsApp que gestiona citas automáticamente usando n8n, Evolution API y OpenAI.
 
