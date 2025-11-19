@@ -3,7 +3,6 @@
 
 Sistema avanzado de automatización de citas por WhatsApp con IA usando n8n, Evolution API y OpenAI. Gestiona conversaciones naturales con clientes, reserva y confirma citas automáticamente, mantiene contexto conversacional completo, valida disponibilidad en tiempo real, y envía recordatorios automáticos.
 
-![WhatsApp Agent Demo](screenshots/demo-conversation.png)
 
 ## 🚀 Características
 
